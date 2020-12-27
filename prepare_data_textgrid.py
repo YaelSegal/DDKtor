@@ -57,7 +57,7 @@ try:
 
 
     # remove_timing_files(args.output_dir)
-    print("Finished.\n The features and labels files are at : '{}'".format(args.output_dir))
+    #print("Finished.\n The features and labels files are at : '{}'".format(args.output_dir))
 except Exception as e:
     print(f"failed to proccess file, Error:{e}")
     exit(1)

@@ -23,11 +23,11 @@ This is a beta version of CNN_DDK. Any reports of bugs, comments on how to impro
 
 - Download SoX from: http://sox.sourceforge.net/ .
 
-- To verify everything is installed run the ```check_installations.sh``` script:
+- To verify everything is installed, change dir to CNN_DDK, and run the ```check_installations.sh``` script:
     ```
     $ ./check_installations.sh
      ```
-  Note: make sure it has an execute permission. (```$ chmod +x ./check_installations.sh```)
+  Note: maybe you will need to change the execution permissions as: ```$ chmod +x ./check_installations.sh```
   
   
 If you encounter any problem, please check the ```log.txt```.
@@ -49,7 +49,7 @@ Note:You can also place directories that contain the ```.wav``` files, the is no
                 │   3.wav
     ```
 
-- You can run one of the following scripts: run_script.sh or run_window.sh
+- You can run one of the following scripts: run_script.sh
 
 Run one othe following scripts:
 
@@ -60,8 +60,8 @@ This script runs CNN_DDK on the windows.
 There are 2 optional params for the script. The first one if the name of the window tier (default is window). 
     
     ```
-    $ ./run_window_script.sh # by default the window tier  is called window 
-    $ ./run_window_script.sh area #  the window tier is called area 
+    $ ./run_script.sh # by default the window tier  is called window 
+    $ ./run_script.sh area #  the window tier is called area 
     ```         
 
     Note: make sure it has an execute permission. (```$ chmod +x ./run_script.sh```)

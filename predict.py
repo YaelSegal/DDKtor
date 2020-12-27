@@ -76,7 +76,7 @@ with torch.no_grad():
 
         pred_dataset = dataset.PredictDataset(wav_filename,args.seed, slices_size=2000, overlap=0, normalize=normalize)
         pred_loader = torch.utils.data.DataLoader( pred_dataset, batch_size=100, shuffle=False,
-        num_workers=20, pin_memory=args.cuda, collate_fn= dataset.PadCollatePred(dim=0))
+        num_workers=0, pin_memory=args.cuda, collate_fn= dataset.PadCollatePred(dim=0))
 
         all_pred_class_idx = []
         for batch_idx, (raw, lens_list) in enumerate(pred_loader):
