@@ -9,7 +9,7 @@ Joseph Keshet (joseph.keshet@biu.ac.il)
 CNN_DDK is a software package for automatic measurement of voice onset time (VOT) and vowels.
 We propose a neural-based architecture composed of CNN as fearues selector and a recurrent neural network(RNN) for classification. CNN_DDK can handle VOT that appears in a middle of a word and short vowels from ddk task. 
 
-This is a beta version of MCNN_DDK. Any reports of bugs, comments on how to improve the software or documentation, or questions are greatly appreciated, and should be sent to the authors at the addresses given above.
+This is a beta version of CNN_DDK. Any reports of bugs, comments on how to improve the software or documentation, or questions are greatly appreciated, and should be sent to the authors at the addresses given above.
 
 ## Installation instructions
 
@@ -55,7 +55,7 @@ Run one othe following scripts:
 
 ### run_script.sh:
 
-This script uses pairs of textgrids and wavs (must have the same name). Each textgrid must contain a window tier that define where the system should look for VOTs (this tier can contain more than one window).
+This script uses pairs of textgrids and wavs (must have the same name). Each textgrid must contain a window tier that define where the system should look for VOTs and vowels(this tier can contain more than one window).
 This script runs CNN_DDK on the windows.
 There are 2 optional params for the script. The first one if the name of the window tier (default is window). 
     
