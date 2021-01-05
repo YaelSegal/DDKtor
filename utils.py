@@ -69,6 +69,21 @@ def padd_list_tensors(targets, targets_lens, dim):
     padded_tensors = torch.stack(padded_tensors_list)
     return padded_tensors
 
+def merge_close(sections_list):
+
+    merge_section = [sections_list[0]]
+    for index in range(1,len(sections_list)):
+        prev_item = merge_section.pop()
+        current_item = sections_list[index]
+        if prev_item[2] == current_item[2]:
+            merge_section.append([prev_item[0], current_item[1], current_item[2], current_item[1]-prev_item[0]])
+        else:
+            merge_section.append(prev_item)
+            merge_section.append(current_item)
+    return merge_section
+
+    
+
 def process_sections(preds_array, new_filename="", pre_process=False):
     change_value = np.diff(preds_array) 
     change_value_idx =  np.argwhere(change_value != 0)
@@ -76,16 +91,16 @@ def process_sections(preds_array, new_filename="", pre_process=False):
     start_idx = 0
     for idx in change_value_idx:
         idx = idx[0]
-        mark = preds_array[idx-1]
-        item_len = idx - start_idx
+        mark = preds_array[idx]
+        item_len = idx - start_idx +1
         remove = False
         if get_name_by_type(mark) == get_name_by_type(VOT) and item_len<5 \
             or get_name_by_type(mark) == get_name_by_type(VOWEL) and item_len <30:
             # print("file:{},{} {}".format(new_filename, get_name_by_type(mark), start_idx / 1000))
             remove = True
  
-        sections_list.append([start_idx, idx,mark, item_len, remove])
-        start_idx = idx
+        sections_list.append([start_idx, idx+1,mark, item_len, remove])
+        start_idx = idx+1
     if start_idx != len(preds_array):
         sections_list.append([start_idx, len(preds_array)-1, 0, len(preds_array) - start_idx, False])
     if pre_process:
@@ -102,6 +117,7 @@ def process_sections(preds_array, new_filename="", pre_process=False):
                 new_sections_list.append([prev_item[0], end_idx, SIL, end_idx- prev_item[0]])
             else:
                 new_sections_list.append([start_idx, end_idx, SIL, item_len])
+        new_sections_list = merge_close(new_sections_list)
         return new_sections_list
 
     else:
