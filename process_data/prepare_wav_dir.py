@@ -34,7 +34,10 @@ def main(args):
         for filename in wav_files:
             has_textgrid = False
             if args.use_textgrid:
-                textgrid_filename = filename.replace(".wav", ".TextGrid")
+                if ".wav" in filename:
+                    textgrid_filename = filename.replace(".wav", ".TextGrid")
+                else:
+                    textgrid_filename = filename.replace(".WAV", ".TextGrid")
                 if is_textgrid(textgrid_filename):
                     new_textgrid_name = os.path.join(args.output_dir,f"{counter}.TextGrid")
                     copyfile(textgrid_filename,new_textgrid_name)
