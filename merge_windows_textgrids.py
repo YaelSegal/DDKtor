@@ -66,7 +66,11 @@ try:
 
         sorted_all_preds_intervals = sorted(all_preds_intervals, key=lambda item: item[0])
         if args.use_prev_textgrid:
-            prev_textgrid = hierarchy_dict[base_filename].replace(".wav",".TextGrid")
+            hierarchy_filename = hierarchy_dict[base_filename]
+            if ".wav" in hierarchy_filename:
+                prev_textgrid = hierarchy_dict[base_filename].replace(".wav",".TextGrid")
+            else:
+                prev_textgrid = hierarchy_dict[base_filename].replace(".WAV",".TextGrid")
             textgrid = TextGrid.fromFile(prev_textgrid)
         else:
             textgrid = TextGrid()

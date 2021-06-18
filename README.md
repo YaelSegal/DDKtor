@@ -57,7 +57,7 @@ Run one othe following scripts:
 
 This script uses pairs of textgrids and wavs (must have the same name). Each textgrid must contain a window tier that define where the system should look for VOTs and vowels(this tier can contain more than one window).
 This script runs CNN_DDK on the windows.
-There are 2 optional params for the script. The first one if the name of the window tier (default is window). 
+There are 2 optional ways to run the script. The first one is without any parameter so the name of the windows tier will have to be "window". The second one is with parameter - where the parameter is the name of the winodws tier. 
     
     ```
     $ ./run_script.sh # by default the window tier  is called window 

@@ -101,16 +101,30 @@ class RawDataset(data.Dataset):
 
 
 class PredictDataset(data.Dataset):
-    def __init__(self, data_path, seed, slices_size=250, overlap=40, normalize=True):
+    def __init__(self, data_path, seed, slices_size=250, overlap=40, normalize=True, norm_type='z'):
         np.random.seed(seed)
         random.seed(seed)
-
+        self.norm_type = norm_type
+        self.normalize = normalize
         y, sr = soundfile.read(data_path)
         if sr !=SR:
             # raise("sample rate not compatible, sr: {}, should be: {}".format(sr, SR))
             print("sample rate not compatible, sr: {}, should be: {}".format(sr, SR))
             new_y = librosa.resample(y,sr,SR)
             y = new_y
+
+        new_y = np.copy(y)
+        
+        if normalize:
+            mean_y, std_y = new_y.mean(), new_y.std()
+            new_y -= mean_y
+            new_y /= std_y
+            # soundfile.write(data_path.replace(".wav","_norm_std.wav"), new_y, sr)
+            a, b = -1, 1
+            new_minmax_y = np.copy(y)
+            new_minmax_y = a + ((new_minmax_y - min(new_minmax_y))*(b-a))/(max(new_minmax_y) - min(new_minmax_y))
+            # soundfile.write(data_path.replace(".wav","_norm_minmax.wav"), new_minmax_y, sr)
+
 
         self.wav_duration = len(y)/SR
         dataset = []
@@ -121,7 +135,7 @@ class PredictDataset(data.Dataset):
             end_ms = int(end/16)
             current_len = end_ms - start_ms
             dataset.append([y[start: end], current_len])
-            start = end-overlap
+            start = end-overlap if end!=len(y) else end
 
         self.dataset = dataset
         self.slices_size = slices_size
@@ -138,7 +152,18 @@ class PredictDataset(data.Dataset):
         """
         y, seq_len = self.dataset[index]
         if self.normalize:
-            y -= y.mean()
+            if self.norm_type == 'z':
+                mean_y, std_y = y.mean(), y.std()
+                y -= mean_y
+                y /= std_y
+            elif self.norm_type == 'minmax':
+                a, b = -1, 1
+                new_minmax_y = np.copy(y.numpy())
+                y = a + ((new_minmax_y - min(new_minmax_y))*(b-a))/(max(new_minmax_y) - min(new_minmax_y))
+                y = torch.FloatTensor(y)
+            else:
+                y -=y.mean()
+
         y_tensor = torch.FloatTensor(y)
 
         return y_tensor, seq_len

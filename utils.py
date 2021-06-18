@@ -80,11 +80,27 @@ def merge_close(sections_list):
         else:
             merge_section.append(prev_item)
             merge_section.append(current_item)
+
     return merge_section
 
-    
+def merge_type(sections_list, ftype):
+    merge_section = [sections_list[0], sections_list[1]]
+    for index in range(2,len(sections_list)):
+        middle_item = merge_section.pop()
+        first_item = merge_section.pop()
+        last_item = sections_list[index]
+        if middle_item[3]<15 and middle_item[2]==SIL and last_item[2]==ftype and first_item[2]==ftype:
+            merge_section.append([first_item[0],last_item[1], ftype, first_item[3]+middle_item[3]+last_item[3]])
+        else:
+            merge_section.append(first_item)
+            merge_section.append(middle_item)
+            merge_section.append(last_item)
 
-def process_sections(preds_array, new_filename="", pre_process=False):
+    return merge_section
+
+
+
+def process_sections(preds_array, pre_process=False):
     change_value = np.diff(preds_array) 
     change_value_idx =  np.argwhere(change_value != 0)
     sections_list = []
@@ -95,7 +111,7 @@ def process_sections(preds_array, new_filename="", pre_process=False):
         item_len = idx - start_idx +1
         remove = False
         if get_name_by_type(mark) == get_name_by_type(VOT) and item_len<5 \
-            or get_name_by_type(mark) == get_name_by_type(VOWEL) and item_len <30:
+            or get_name_by_type(mark) == get_name_by_type(VOWEL) and item_len <20:
             # print("file:{},{} {}".format(new_filename, get_name_by_type(mark), start_idx / 1000))
             remove = True
  
@@ -111,21 +127,19 @@ def process_sections(preds_array, new_filename="", pre_process=False):
                 continue
             prev_item = sections_list[idx-1] if idx-1 >= 0 else None
             # next_item = sections_list[idx+1] if idx+1 <= len(sections_list) -1 else None
-            
+            new_sections_list.append([start_idx, end_idx, SIL, item_len])
             if prev_item and prev_item[2] == SIL:
                 new_sections_list.pop()
                 new_sections_list.append([prev_item[0], end_idx, SIL, end_idx- prev_item[0]])
-            else:
-                new_sections_list.append([start_idx, end_idx, SIL, item_len])
         new_sections_list = merge_close(new_sections_list)
+        new_sections_list = merge_type(new_sections_list, VOT)
         return new_sections_list
-
     else:
         return [x[:-1] for x in sections_list]
 
 def create_textgrid(preds_array, new_filename, wav_len):
 
-    sections_list = process_sections(preds_array, new_filename, True)
+    sections_list = process_sections(preds_array, True)
     new_textgrid = textgrid.TextGrid()
     tier = textgrid.IntervalTier(name="preds", minTime=0)
 
@@ -302,8 +316,10 @@ def find_pairs(pred_sections, target_sections):
         start_t = target_sections[target_idx][0]
         end_t = target_sections[target_idx][1]
         for idx in idx_list:
-            start_p = pred_sections[idx][0]
-            end_p = pred_sections[idx][1]
+            pred_idx = pairs[idx][0]
+            # pred_idx = idx
+            start_p = pred_sections[pred_idx][0]
+            end_p = pred_sections[pred_idx][1]
             uni = min(end_t, end_p) - max(start_t, start_p)
             if uni > best_uni:
                 best_uni = uni
