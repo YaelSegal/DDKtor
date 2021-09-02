@@ -3,6 +3,8 @@ system for detection of VOT and Vowels for ddk task
 
 
 Yael Segal(segalya@cs.biu.ac.il)\
+Kasia Hitczenko(kasia.hitczenko@northwestern.edu)\
+Matthew Goldrick(matt-goldrick@northwestern.edu)\
 Joseph Keshet (joseph.keshet@biu.ac.il)             
 
              
