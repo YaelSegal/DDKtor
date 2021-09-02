@@ -1,8 +1,4 @@
-
-
-__author__ = 'YaelSegal '
-from pathlib import Path
-import os
+__author__ = 'YaelSegal'
 import os.path
 import random
 import librosa
@@ -14,8 +10,6 @@ import random
 import glob
 import utils
 from utils import SIL, VOT,VOWEL, SR
-from torch.utils.data.sampler import Sampler
-import math
 
 
 
@@ -61,45 +55,6 @@ def make_dataset(data_path, slices_size, overlap, predict):
     return dataset, wav_labels_dict
 
 
-
-
-class RawDataset(data.Dataset):
-    """
-    """
-
-    def __init__(self, data_path, seed, slices_size=250, overlap=40, normalize=True, predict=False):
-        np.random.seed(seed)
-        random.seed(seed)
-
-
-        dataset, wav_labels_dict = make_dataset(data_path, slices_size, overlap, predict)
-        self.dataset = dataset
-        self.wav_labels_dict = wav_labels_dict
-        self.slices_size = slices_size
-        self.normalize = normalize
-
-  
-
-    def __getitem__(self, index):
-        """
-        Args:
-            index (int): Index
-        Returns:
-            tuple: (spect, target) where target is class_index of the target class.
-        """
-        y, start, labels_array, wav_filename = self.dataset[index]
-        if self.normalize:
-            y -= y.mean()
-        y_tensor = torch.FloatTensor(y)
-        labels_tensor = torch.FloatTensor(labels_array)
-
-        return y_tensor, labels_tensor, len(labels_array)
-
-
-    def __len__(self):
-        return len(self.dataset)
-
-
 class PredictDataset(data.Dataset):
     def __init__(self, data_path, seed, slices_size=250, overlap=40, normalize=True, norm_type='z'):
         np.random.seed(seed)
@@ -108,7 +63,6 @@ class PredictDataset(data.Dataset):
         self.normalize = normalize
         y, sr = soundfile.read(data_path)
         if sr !=SR:
-            # raise("sample rate not compatible, sr: {}, should be: {}".format(sr, SR))
             print("sample rate not compatible, sr: {}, should be: {}".format(sr, SR))
             new_y = librosa.resample(y,sr,SR)
             y = new_y
@@ -119,12 +73,9 @@ class PredictDataset(data.Dataset):
             mean_y, std_y = new_y.mean(), new_y.std()
             new_y -= mean_y
             new_y /= std_y
-            # soundfile.write(data_path.replace(".wav","_norm_std.wav"), new_y, sr)
             a, b = -1, 1
             new_minmax_y = np.copy(y)
             new_minmax_y = a + ((new_minmax_y - min(new_minmax_y))*(b-a))/(max(new_minmax_y) - min(new_minmax_y))
-            # soundfile.write(data_path.replace(".wav","_norm_minmax.wav"), new_minmax_y, sr)
-
 
         self.wav_duration = len(y)/SR
         dataset = []

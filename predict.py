@@ -2,38 +2,22 @@
 
 __author__ = 'YaelSegal'
 
-import torch.optim as optim
 import torch
 import torch.nn.functional as F
 import argparse
 import dataset 
 import numpy as np
 import os
-import utils
-from pathlib import Path
-from model import CnnLstmRaw, load_model
-import torch.nn as nn
-import soundfile
+from model import load_model
 import glob
 import random
-import math
 from utils import SR, create_textgrid
 import tqdm
-# import librosa
 import dataset
-# import warnings
-BUCH = '/data/segalya/ddk/UnsupSeg/buchwald_proccess_vot'
-
 
 parser = argparse.ArgumentParser(description='test vowel/vot')
-parser.add_argument('--data', type=str, default='./data/processed/' , help="BUCH ||",)
-parser.add_argument('--out_dir', type=str, default='./data/out_tg/tmp_parts' , help="BUCH ||",)
-
-# parser.add_argument('--data', type=str, default='/data/segalya/ddk/UnsupSeg/buchwald_proccess_vot/val' , help="BUCH ||",)
-# parser.add_argument('--out_dir', type=str, default='/data/segalya/ddk/UnsupSeg/buchwald_proccess_vot/predict_textgrid' , help="BUCH ||",)
-
-
-# parser.add_argument('--model', type=str, default='./model_cnn_lstm/data_BUCH_lr_0.0001_decay_1000_input_size_256_num_layers_2_hidden_size_256_channels_256_normalize_True_biLSTM_True_measure_loss_dropout_0.3_class_num_3_.pth', help='directory to save the model')
+parser.add_argument('--data', type=str, default='./data/processed/' , help="directory of the data",)
+parser.add_argument('--out_dir', type=str, default='./data/out_tg/tmp_parts' , help="output directory",)
 
 # new models
 # parser.add_argument('--model', type=str, default='./model_cnn_lstm/data_BUCH_UPDATE_ntype_cnn_sim_lr_0.0001_input_size_256_num_layers_2_hidden_size_256_channels_256_normalize_True_norm_type_z_biLSTM_False_measure_rval_dropout_0.3_class_num_3_sigmoid_False_chain_bandreject,noise_lamda_1.0_59021734.pth', help='directory to save the model')
@@ -80,7 +64,6 @@ with torch.no_grad():
     for wav_filename in tqdm.tqdm(files_list):
         wav_basename = wav_filename.split("/")[-1]
 
-        # pred_dataset = dataset.PredictDataset(wav_filename,args.seed, slices_size=250, overlap=0, normalize=normalize, norm_type=norm_type)
         pred_dataset = dataset.PredictDataset(wav_filename,args.seed, slices_size=1000, overlap=0, normalize=normalize, norm_type=norm_type)
         pred_loader = torch.utils.data.DataLoader( pred_dataset, batch_size=100, shuffle=False,
         num_workers=0, pin_memory=args.cuda, collate_fn= dataset.PadCollatePred(dim=0))
@@ -99,7 +82,6 @@ with torch.no_grad():
 
             for idx in range(output.size(0)): 
                 cur_len = lens_list[idx]
-                # pred_class_idx = torch.argmax(output[idx,:cur_len], dim=1)
                 pred_class_values, pred_class_idx = torch.max(output[idx,:cur_len], dim=1)
                 conf.extend(F.softmax(output[idx,:cur_len], dim=1).cpu().numpy().tolist())
                 pred_class_idx = pred_class_idx.cpu().numpy()
@@ -108,7 +90,6 @@ with torch.no_grad():
 
         textgrid_basename = wav_basename.replace(".wav", ".TextGrid")
         textgrid_filename = os.path.join(args.out_dir, textgrid_basename)
-        # create_textgrid(np.array(all_pred_class_idx), textgrid_filename, pred_dataset.wav_duration, conf)
         create_textgrid(np.array(all_pred_class_idx), textgrid_filename, pred_dataset.wav_duration)
 
 

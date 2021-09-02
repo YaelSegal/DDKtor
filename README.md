@@ -1,4 +1,4 @@
-# CNN_DDK
+# DeepDDK
 system for detection of VOT and Vowels for ddk task
 
 
@@ -6,10 +6,10 @@ Yael Segal(segalya@cs.biu.ac.il)\
 Joseph Keshet (joseph.keshet@biu.ac.il)             
 
              
-CNN_DDK is a software package for automatic measurement of voice onset time (VOT) and vowels.
-We propose a neural-based architecture composed of CNN as fearues selector and a recurrent neural network(RNN) for classification. CNN_DDK can handle VOT that appears in a middle of a word and short vowels from ddk task. 
+DeepDDK is a software package for automatic measurement of voice onset time (VOT) and vowels.
+We propose a neural-based architecture composed of CNN as fearues selector and a recurrent neural network(RNN) for classification. DeepDDK can handle VOT that appears in a middle of a word and short vowels from ddk task. 
 
-This is a beta version of CNN_DDK. Any reports of bugs, comments on how to improve the software or documentation, or questions are greatly appreciated, and should be sent to the authors at the addresses given above.
+This is a beta version of DeepDDK. Any reports of bugs, comments on how to improve the software or documentation, or questions are greatly appreciated, and should be sent to the authors at the addresses given above.
 
 ## Installation instructions
 
@@ -17,13 +17,13 @@ This is a beta version of CNN_DDK. Any reports of bugs, comments on how to impro
 
 - Download the code:
     ```
-    git clone https://github.com/YaelSegal/CNN_DDK
+    git clone https://github.com/YaelSegal/DeepDDK
     ```
 - Download Praat from: http://www.fon.hum.uva.nl/praat/ .
 
 - Download SoX from: http://sox.sourceforge.net/ .
 
-- To verify everything is installed, change dir to CNN_DDK, and run the ```check_installations.sh``` script:
+- To verify everything is installed, change dir to DeepDDK, and run the ```check_installations.sh``` script:
     ```
     $ ./check_installations.sh
      ```
@@ -56,7 +56,7 @@ Run one othe following scripts:
 ### run_script.sh:
 
 This script uses pairs of textgrids and wavs (must have the same name). Each textgrid must contain a window tier that define where the system should look for VOTs and vowels(this tier can contain more than one window).
-This script runs CNN_DDK on the windows.
+This script runs DeepDDK on the windows.
 There are 2 optional ways to run the script. The first one is without any parameter so the name of the windows tier will have to be "window". The second one is with parameter - where the parameter is the name of the winodws tier. 
     
     ```

@@ -1,14 +1,15 @@
 
+__author__ = 'YosiShrem'
 from boltons import fileutils
 import os
-from shutil import copyfile,SameFileError
+from shutil import copyfile
 import sys
 import argparse
 import soundfile
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from helpers.utilities import *
 from helpers.textgrid import *
-__author__ = 'YosiShrem'
+
 
 files_dict_fname="files.txt"
 SR = 16000

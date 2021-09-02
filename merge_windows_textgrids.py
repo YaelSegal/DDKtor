@@ -2,18 +2,14 @@ __author__ = 'YaelSegal'
 
 import argparse
 import os
-import soundfile 
 from helpers.textgrid import *
-import time
 from helpers.utilities import basic_hierarchy_dict,get_hierarchy_path
 import glob
 
 parser = argparse.ArgumentParser(description='copy all wav files from all sub dirs to out_dir')
 parser.add_argument('--input_dir', type=str, help='Path of wavs dir',default="./data/out_tg/tmp_parts")
-# parser.add_argument('--output_dir', type=str, help='Path to output dir',default="./data/out_tg/tmp")
 parser.add_argument('--output_dir', type=str, help='Path to output dir',default="./data/out_tg")
 parser.add_argument('--pred_tier',  type=str, default="preds", help='pred tier in textgrid')
-# parser.add_argument('--basic_hierarchy_file', default="", type=str, help="features dir")
 parser.add_argument('--basic_hierarchy_file', default="./data/raw/all_files/files.txt", type=str, help="features dir")
 parser.add_argument('--durations', default="./data/raw/all_files/voice_starts.txt", type=str, help="start for part files")
 parser.add_argument('--use_prev_textgrid', action='store_true', help='use prev textgrid')

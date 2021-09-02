@@ -1,5 +1,5 @@
 #!/bin/sh
-# This is a comment!
+
 
 
 
@@ -31,8 +31,8 @@ mkdir ./data/out_tg/tmp_merge
 echo "============"
 echo "Step 0: Installing dependencies in a virtual environment(It doesn't change your settings)"
 echo "============"
-#yael
-# python3 -m pip install --user virtualenv
+
+python3 -m pip install --user virtualenv
 python3 -m venv env
 source env/bin/activate
 pip install -r requirements.txt
@@ -43,7 +43,6 @@ echo "============"
 python ./process_data/prepare_wav_dir.py --input_dir ./data/raw --output_dir ./data/raw/all_files --use_textgrid
 if [ $? -eq 1 ]; then
     echo "Failed to collect the data, check run_window_log.txt"
-    # F_cleanup
     exit 1
 fi
 
@@ -57,13 +56,12 @@ if [ $? -eq 1 ]; then
 fi
 
 echo "============"
-echo "Step 3: Running CNN DDK"
+echo "Step 3: Running DeepDDK"
 echo "============"
 
-# python predict.py --features_dir ./data/processed/ --out_dir ./data/out_tg/tmp_parts --model ./final_models/mid_extra.pth --durations ./data/raw/all_files/voice_starts.txt --pre 0
 python predict.py --data ./data/processed/ --out_dir ./data/out_tg/tmp_parts --cuda
 if [ $? -eq 1 ]; then
-    echo "Failed to run Mid VOT predict, check run_window_log.txt"
+    echo "Failed to run DeepDDK predict, check run_window_log.txt"
     exit 1
 fi
 
@@ -75,7 +73,7 @@ echo "============"
 
 python merge_windows_textgrids.py --input_dir ./data/out_tg/tmp_parts --output_dir ./data/out_tg --pred_tier preds  --durations ./data/raw/all_files/voice_starts.txt --basic_hierarchy_file ./data/raw/all_files/files.txt --use_prev_textgrid
 if [ $? -eq 1 ]; then
-    echo "Failed to run CNN DDK merge , check run_window_log.txt"
+    echo "Failed to run DeepDDK merge , check run_window_log.txt"
     exit 1
 fi
 

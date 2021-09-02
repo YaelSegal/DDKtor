@@ -2,10 +2,10 @@ __author__ = 'YaelSegal'
 import argparse
 import os
 import soundfile 
-import time
 import glob
 import tqdm
 from helpers.textgrid import *
+from utils import fix_extention
 
 parser = argparse.ArgumentParser(description='copy all wav files from all sub dirs to out_dir')
 parser.add_argument('--input_dir', type=str, help='Path of wavs dir',default="./data/raw/all_files")
@@ -55,9 +55,6 @@ print("Input path : '{}' \nOutput path : '{}'".format(args.input_dir, args.outpu
 try:
     process_textgrid_data(args.input_dir, args.output_dir, args.windows_tier)
 
-
-    # remove_timing_files(args.output_dir)
-    #print("Finished.\n The features and labels files are at : '{}'".format(args.output_dir))
 except Exception as e:
     print(f"failed to proccess file, Error:{e}")
     exit(1)
