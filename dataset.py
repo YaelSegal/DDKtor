@@ -82,6 +82,8 @@ class PredictDataset(data.Dataset):
         start = 0
         while start < len(y):
             end = min(start + slices_size * 16, len(y))
+            if end- start < 32:
+                break
             start_ms = int(start/16)
             end_ms = int(end/16)
             current_len = end_ms - start_ms
