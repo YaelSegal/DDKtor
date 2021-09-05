@@ -51,9 +51,16 @@ def main(args):
                 new_name = os.path.join(args.output_dir,f"{counter}.wav")
                 y, sr = soundfile.read(filename)
                 if sr != SR:      
-                    cmd = "sox -v 0.9 %s  -r 16000 -b 16 %s" % (filename, new_name)
+                    cmd = "sox -v 0.9 %s  -r 16000 -b 16 %s remix -" % (filename, new_name)
                     easy_call(cmd)
-                    print("convert {} from {} samples rate to {} samples rate".format(filename, sr, SR))
+                    if  len(y.shape) > 1:
+                        print("convert {} from {} samples rate to {} samples rate and convert file to mono".format(filename, sr, SR))
+                    else:
+                        print("convert {} from {} samples rate to {} samples rate".format(filename, sr, SR))
+                elif len(y.shape) > 1:
+                    cmd = "sox %s %s remix −" % (filename, new_name)
+                    easy_call(cmd)
+                    print("convert file to mono")
                 else:
                     copyfile(filename,new_name)
                 counter+=1
