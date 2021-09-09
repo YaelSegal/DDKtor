@@ -53,7 +53,7 @@ Note:You can also place directories that contain the ```.wav``` files, the is no
 
 - You can run one of the following scripts: run_script.sh
 
-Run one othe following scripts:
+Run the following script:
 
 ### run_script.sh:
 
