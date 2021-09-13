@@ -73,7 +73,7 @@ echo "============"
 
 python merge_windows_textgrids.py --input_dir ./data/out_tg/tmp_parts --output_dir ./data/out_tg --pred_tier preds  --durations ./data/raw/all_files/voice_starts.txt --basic_hierarchy_file ./data/raw/all_files/files.txt --use_prev_textgrid
 if [ $? -eq 1 ]; then
-    echo "Failed to run DeepDDK merge , check run_window_log.txt"
+    echo "Failed to run DeepDDK merge , check run_log.txt"
     exit 1
 fi
 

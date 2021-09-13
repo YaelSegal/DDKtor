@@ -43,10 +43,9 @@ try:
         parent_time = parent_textgrid_dict_times.get(parent_name, 0)
         textgrid_interval = textgrid.getFirst(args.pred_tier)
         start_in_file = durations_dict[basename + ".wav"][0]
-        start_in_file = round(start_in_file,3)
         for interval in textgrid_interval.intervals:
             if interval.mark:
-                parent_list.append([interval.minTime + start_in_file, interval.maxTime + start_in_file, interval.mark])
+                parent_list.append([round(interval.minTime + start_in_file, 3), round(interval.maxTime + start_in_file,3), interval.mark])
         parent_textgrid_dict_intervals[parent_name] = parent_list
         parent_textgrid_dict_times[parent_name] = max(textgrid.maxTime+start_in_file, parent_time)
 
