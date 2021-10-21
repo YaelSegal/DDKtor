@@ -22,7 +22,10 @@ parser.add_argument('--out_dir', type=str, default='./data/out_tg/tmp_parts' , h
 
 # new models
 # parser.add_argument('--model', type=str, default='./model_cnn_lstm/data_BUCH_UPDATE_ntype_cnn_sim_lr_0.0001_input_size_256_num_layers_2_hidden_size_256_channels_256_normalize_True_norm_type_z_biLSTM_False_measure_rval_dropout_0.3_class_num_3_sigmoid_False_chain_bandreject,noise_lamda_1.0_59021734.pth', help='directory to save the model')
-parser.add_argument('--model', type=str, default='./model_cnn_lstm/data_BUCH_UPDATE_ntype_lstm_sim_lr_0.0001_input_size_256_num_layers_2_hidden_size_256_channels_256_normalize_True_norm_type_z_biLSTM_True_measure_rval_dropout_0.3_class_num_3_sigmoid_False_chain_bandreject,noise_lamda_1.0_59021734.pth', help='directory to save the model')
+# parser.add_argument('--model', type=str, default='./model_cnn_lstm/data_BUCH_UPDATE_ntype_lstm_sim_lr_0.0001_input_size_256_num_layers_2_hidden_size_256_channels_256_normalize_True_norm_type_z_biLSTM_True_measure_rval_dropout_0.3_class_num_3_sigmoid_False_chain_bandreject,noise_lamda_1.0_59021734.pth', help='directory to save the model')
+
+# trained on kasia data
+parser.add_argument('--model', type=str, default='./model_cnn_lstm/data_KASIA_ntype_lstm_sim_lr_0.0001_input_size_256_num_layers_2_hidden_size_256_channels_256_normalize_True_norm_type_z_biLSTM_True_measure_rval_dropout_0.3_class_num_3_sigmoid_False_chain_bandreject,noise_lamda_1.0_59021734.pth', help='directory to save the model')
 
 parser.add_argument('--basic_hierarchy_file', default="./data/raw/all_files/files.txt", type=str, help="features dir")
 parser.add_argument('--cuda', action='store_true', help='use CUDA')
@@ -62,11 +65,12 @@ hierarchy_dict = basic_hierarchy_dict(args.basic_hierarchy_file)
 with torch.no_grad():
     test_model.eval()
     files_list = glob.glob(args.data + "/*.wav")
+
     for wav_filename in tqdm.tqdm(files_list):
         try:
             wav_basename = wav_filename.split("/")[-1]
 
-            pred_dataset = dataset.PredictDataset(wav_filename,args.seed, slices_size=1000, overlap=0, normalize=normalize, norm_type=norm_type)
+            pred_dataset = dataset.PredictDataset(wav_filename,args.seed, slices_size=5000, overlap=0, normalize=normalize, norm_type=norm_type)
             pred_loader = torch.utils.data.DataLoader( pred_dataset, batch_size=100, shuffle=False,
             num_workers=0, pin_memory=args.cuda, collate_fn= dataset.PadCollatePred(dim=0))
             all_pred_class_idx = []

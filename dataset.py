@@ -67,16 +67,6 @@ class PredictDataset(data.Dataset):
             new_y = librosa.resample(y,sr,SR)
             y = new_y
 
-        new_y = np.copy(y)
-        
-        if normalize:
-            mean_y, std_y = new_y.mean(), new_y.std()
-            new_y -= mean_y
-            new_y /= std_y
-            a, b = -1, 1
-            new_minmax_y = np.copy(y)
-            new_minmax_y = a + ((new_minmax_y - min(new_minmax_y))*(b-a))/(max(new_minmax_y) - min(new_minmax_y))
-
         self.wav_duration = len(y)/SR
         dataset = []
         start = 0

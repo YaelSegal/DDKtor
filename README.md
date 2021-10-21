@@ -59,11 +59,14 @@ Run the following script:
 
 This script uses pairs of textgrids and wavs (must have the same name). Each textgrid must contain a window tier that define where the system should look for VOTs and vowels(this tier can contain more than one window).
 This script runs DDKtor on the windows.
-There are 2 optional ways to run the script. The first one is without any parameter so the name of the windows tier will have to be "window". The second one is with parameter - where the parameter is the name of the winodws tier. 
+There are few optional ways to run the script. The first one is without any parameter so the name of the windows tier will have to be "window". The second one is with parameter - where the parameter is the name of the winodws tier. 
+In addition, there is an option to run the model with pre-processing to reduce noise (using the package noisereduce)
     
     ```
-    $ ./run_script.sh # by default the window tier  is called window 
-    $ ./run_script.sh area #  the window tier is called area 
+    $ ./run_script.sh # by default the window tier is called window, without noise reduction
+    $ ./run_script.sh -w area #  the window tier is called area, without noise reduction
+    $ ./run_script.sh -n # the window tier is called  window, with noise reduction
+    $ ./run_script.sh -w area -n #  the window tier is called area, with noise reduction
     ```         
 
     Note: make sure it has an execute permission. (```$ chmod +x ./run_script.sh```)

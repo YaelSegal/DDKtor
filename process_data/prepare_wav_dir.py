@@ -1,5 +1,5 @@
 
-__author__ = 'YosiShrem'
+__author__ = 'YosiShrem& Yael Segal'
 from boltons import fileutils
 import os
 from shutil import copyfile
@@ -10,7 +10,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from helpers.utilities import *
 from helpers.textgrid import *
 
-
+import noisereduce as nr
+import librosa
 files_dict_fname="files.txt"
 SR = 16000
 def main(args):
@@ -19,6 +20,7 @@ def main(args):
         parser.add_argument('--input_dir', type=str, help='Path of wavs dir', default="./data/raw")
         parser.add_argument('--use_textgrid', action='store_true', help='copy textgrid in order to use it windows')
         parser.add_argument('--output_dir', type=str, help='Path to output dir', default="./data/raw/all_files")
+        parser.add_argument('--clean_noise', action='store_true', help='clear noise from file')
         args = parser.parse_args()
 
 
@@ -26,6 +28,9 @@ def main(args):
         assert os.path.exists(args.output_dir),f"Invalid Path, couldn't find [{args.output_dir}]"
 
         wav_files = list(fileutils.iter_find_files(args.input_dir, "*.wav"))+list(fileutils.iter_find_files(args.input_dir, "*.WAV"))
+        no_noise_dir = args.input_dir + "_no_noise"
+        if args.clean_noise:
+            os.makedirs(no_noise_dir, exist_ok=True)
 
         counter=0
         files_dict={}
@@ -50,8 +55,10 @@ def main(args):
                     os.remove(os.path.join(args.output_dir,f"{counter}.wav"))
                 new_name = os.path.join(args.output_dir,f"{counter}.wav")
                 y, sr = soundfile.read(filename)
+
+
                 if sr != SR:      
-                    cmd = "sox -v 0.9 %s  -r 16000 -b 16 %s remix -" % (filename, new_name)
+                    cmd = "sox  %s  -r 16000 -b 16 %s remix -" % (filename, new_name)
                     easy_call(cmd)
                     if  len(y.shape) > 1:
                         print("convert {} from {} samples rate to {} samples rate and convert file to mono".format(filename, sr, SR))
@@ -63,6 +70,15 @@ def main(args):
                     print("convert file to mono")
                 else:
                     copyfile(filename,new_name)
+                
+                # perform noise reduction
+                if args.clean_noise:
+                    y, sr = soundfile.read(new_name)
+                    reduced_noise = nr.reduce_noise(y=y, sr=sr, stationary=True, prop_decrease=0.75)
+                    filename = filename.replace(args.input_dir, no_noise_dir)
+                    soundfile.write(filename,reduced_noise, sr )
+                    soundfile.write(new_name,reduced_noise, sr )
+
                 counter+=1
         if not has_files:
             raise Exception("No textgrid-wav pairs in {} ".format(args.input_dir))

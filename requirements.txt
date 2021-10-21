@@ -18,3 +18,4 @@ stevedore==2.0.0
 torch==1.7.1
 tqdm==4.46.1
 librosa==0.8.0
+noisereduce==2.0.0

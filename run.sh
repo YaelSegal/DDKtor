@@ -10,6 +10,7 @@ F_cleanup() {
     rm -fr ./data/processed > /dev/null
     rm -fr ./data/out_tg/tmp_parts > /dev/null
     rm -fr ./data/out_tg/tmp_merge > /dev/null
+    # rm -fr ./data/raw_no_noise > /dev/null
     exit
 }
 
@@ -18,6 +19,7 @@ F_cleanup() {
 rm -fr ./data/raw/all_files/* > /dev/null
 rm -fr ./data/processed/* > /dev/null
 rm -fr ./data/out_tg/* > /dev/null
+rm -fr ./data/raw_no_noise > /dev/null
 
 #creating dirs
 mkdir ./data/ 
@@ -27,6 +29,7 @@ mkdir ./data/raw/all_files
 mkdir ./data/out_tg
 mkdir ./data/out_tg/tmp_parts
 mkdir ./data/out_tg/tmp_merge
+mkdir ./data/raw_no_noise
 
 echo "============"
 echo "Step 0: Installing dependencies in a virtual environment(It doesn't change your settings)"
@@ -37,10 +40,20 @@ python3 -m venv env
 source env/bin/activate
 pip install -r requirements.txt
 
-echo "============"
-echo "Step 1: Preparing the data"
-echo "============"
-python ./process_data/prepare_wav_dir.py --input_dir ./data/raw --output_dir ./data/raw/all_files --use_textgrid
+
+if [ "$2" = true ]; then
+    echo "============"
+    echo "Step 1: Preparing the data - with noise-reduction"
+    echo "============"
+    python ./process_data/prepare_wav_dir.py --input_dir ./data/raw --output_dir ./data/raw/all_files --use_textgrid --clean_noise
+else
+    echo "============"
+    echo "Step 1: Preparing the data - without noise-reduction"
+    echo "============"
+    python ./process_data/prepare_wav_dir.py --input_dir ./data/raw --output_dir ./data/raw/all_files --use_textgrid 
+fi
+
+
 if [ $? -eq 1 ]; then
     echo "Failed to collect the data, check run_window_log.txt"
     exit 1

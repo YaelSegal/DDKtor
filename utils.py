@@ -72,13 +72,26 @@ def merge_close(sections_list):
 
     return merge_section
 
-def merge_type(sections_list, ftype):
+def merge_type(sections_list, ftype, gap=20):
+    if len(sections_list)< 2:
+        return sections_list
     merge_section = [sections_list[0], sections_list[1]]
+
     for index in range(2,len(sections_list)):
-        middle_item = merge_section.pop()
-        first_item = merge_section.pop()
+
+        if len(merge_section)<2:
+
+            middle_item = merge_section.pop()
+            last_item = sections_list[index]
+            merge_section.append(middle_item)
+            merge_section.append(last_item)
+            continue
+        else:
+            middle_item = merge_section.pop()
+            first_item = merge_section.pop()
+  
         last_item = sections_list[index]
-        if middle_item[3]<15 and middle_item[2]==SIL and last_item[2]==ftype and first_item[2]==ftype:
+        if  middle_item[3]<gap and middle_item[2]==SIL and last_item[2]==ftype and first_item[2]==ftype:
             merge_section.append([first_item[0],last_item[1], ftype, first_item[3]+middle_item[3]+last_item[3]])
         else:
             merge_section.append(first_item)
@@ -118,6 +131,7 @@ def process_sections(preds_array, pre_process=False):
                 new_sections_list.append([prev_item[0], end_idx, SIL, end_idx- prev_item[0]])
         new_sections_list = merge_close(new_sections_list)
         new_sections_list = merge_type(new_sections_list, VOT)
+
         return new_sections_list
     else:
         return [x[:-1] for x in sections_list]
@@ -138,7 +152,7 @@ def create_textgrid(preds_array, new_filename, wav_len):
             print("file:{},vot {}:{}".format(new_filename, start_sec, end_sec))
         elif get_name_by_type(mark) == get_name_by_type(VOWEL) and item_len <30:
             add = "short {}".format(item_len)
-            print("file:{},vowel {}:{}".format(new_filename, start_sec, end_sec))
+            print("file:{},short vowel {}:{}".format(new_filename, start_sec, end_sec))
 
         tier.add(start_sec, end_sec, get_name_by_type(mark) + add)
 
