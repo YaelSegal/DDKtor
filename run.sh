@@ -10,7 +10,7 @@ F_cleanup() {
     rm -fr ./data/processed > /dev/null
     rm -fr ./data/out_tg/tmp_parts > /dev/null
     rm -fr ./data/out_tg/tmp_merge > /dev/null
-    # rm -fr ./data/raw_no_noise > /dev/null
+
     exit
 }
 
@@ -19,7 +19,7 @@ F_cleanup() {
 rm -fr ./data/raw/all_files/* > /dev/null
 rm -fr ./data/processed/* > /dev/null
 rm -fr ./data/out_tg/* > /dev/null
-rm -fr ./data/raw_no_noise > /dev/null
+
 
 #creating dirs
 mkdir ./data/ 
@@ -29,7 +29,7 @@ mkdir ./data/raw/all_files
 mkdir ./data/out_tg
 mkdir ./data/out_tg/tmp_parts
 mkdir ./data/out_tg/tmp_merge
-mkdir ./data/raw_no_noise
+
 
 echo "============"
 echo "Step 0: Installing dependencies in a virtual environment(It doesn't change your settings)"
@@ -55,7 +55,7 @@ fi
 
 
 if [ $? -eq 1 ]; then
-    echo "Failed to collect the data, check run_window_log.txt"
+    echo "Failed to collect the data, check run_log.txt"
     exit 1
 fi
 

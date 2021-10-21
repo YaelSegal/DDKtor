@@ -28,9 +28,6 @@ def main(args):
         assert os.path.exists(args.output_dir),f"Invalid Path, couldn't find [{args.output_dir}]"
 
         wav_files = list(fileutils.iter_find_files(args.input_dir, "*.wav"))+list(fileutils.iter_find_files(args.input_dir, "*.WAV"))
-        no_noise_dir = args.input_dir + "_no_noise"
-        if args.clean_noise:
-            os.makedirs(no_noise_dir, exist_ok=True)
 
         counter=0
         files_dict={}
@@ -75,8 +72,7 @@ def main(args):
                 if args.clean_noise:
                     y, sr = soundfile.read(new_name)
                     reduced_noise = nr.reduce_noise(y=y, sr=sr, stationary=True, prop_decrease=0.75)
-                    filename = filename.replace(args.input_dir, no_noise_dir)
-                    soundfile.write(filename,reduced_noise, sr )
+
                     soundfile.write(new_name,reduced_noise, sr )
 
                 counter+=1
