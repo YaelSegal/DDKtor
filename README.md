@@ -15,7 +15,7 @@ This is a beta version of DDKtor. Any reports of bugs, comments on how to improv
 
 ## Installation instructions
 
-- Python 3.6+
+- Python 3.7+
 
 - Download the code:
     ```
