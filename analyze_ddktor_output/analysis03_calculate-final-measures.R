@@ -118,7 +118,7 @@ for (i in 1:length(levels(factor(windows$file)))) {
 }
 windows$win_number <- window_number
 
-trial_summary <- data.frame(windows$file, windows$subtask, windows$win_number, windows$win_type, windows$win_start, windows$voiced, windows$ddktor_count_close, windows$nsyll, windows$ddk_rate, windows$mean_vot_dur, windows$mean_vowel_dur)
-names(trial_summary) <- c('file', 'subtask', 'window_number', 'window_type', 'window_start', 'voiced', 'ddktor_count_close', 'nsyll', 'ddk_rate', 'mean_vot_duration', 'mean_vowel_duration')
+trial_summary <- data.frame(windows$file, windows$subtask, windows$win_number, windows$win_type, windows$win_start, windows$nsyll, windows$ddk_rate, windows$mean_vot_dur, windows$mean_vowel_dur)
+names(trial_summary) <- c('file', 'subtask', 'window_number', 'window_type', 'window_start', 'nsyll', 'ddk_rate', 'mean_vot_duration', 'mean_vowel_duration')
 write.csv(trial_summary, paste0("../data/out_summary/bytrial-measures.csv"), quote = FALSE, row.names = FALSE)
 
