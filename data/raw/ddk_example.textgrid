@@ -19,7 +19,7 @@ item []:
         intervals [2]:
             xmin = 3.2176179715490885 
             xmax = 6.582916247224162 
-            text = "window" 
+            text = "p" 
         intervals [3]:
             xmin = 6.582916247224162 
             xmax = 7.752195873434058 
@@ -27,7 +27,7 @@ item []:
         intervals [4]:
             xmin = 7.752195873434058 
             xmax = 10.875078595352875 
-            text = "window" 
+            text = "t" 
         intervals [5]:
             xmin = 10.875078595352875 
             xmax = 12.587498812938176 
@@ -35,7 +35,7 @@ item []:
         intervals [6]:
             xmin = 12.587498812938176 
             xmax = 15.824459442506994 
-            text = "window" 
+            text = "k" 
         intervals [7]:
             xmin = 15.824459442506994 
             xmax = 17.159703842298683 
@@ -43,7 +43,7 @@ item []:
         intervals [8]:
             xmin = 17.159703842298683 
             xmax = 21.85115779440503 
-            text = "window" 
+            text = "ptk" 
         intervals [9]:
             xmin = 21.85115779440503 
             xmax = 22.312925170068027 
