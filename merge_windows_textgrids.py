@@ -72,7 +72,7 @@ try:
             textgrid = TextGrid()
         new_tier_name = args.pred_tier
         tmp_x_min = 0
-        tmp_x_max = parent_textgrid_dict_times[base_filename]
+        tmp_x_max = max(parent_textgrid_dict_times[base_filename], textgrid.maxTime)
         tier = IntervalTier(new_tier_name)
         for item in sorted_all_preds_intervals:
             x_min = item[0]
